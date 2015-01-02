@@ -57,8 +57,8 @@
                         return false;
                     }
                 });
-
-            $(".datepicker").datepicker();
+            var pickerOpts = { dateFormat: "dd MM yy" };
+            $(".datepicker").datepicker(pickerOpts);
         });
     </script>
 }

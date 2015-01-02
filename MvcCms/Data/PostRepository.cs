@@ -10,6 +10,19 @@ namespace MvcCms.Data
 {
     public class PostRepository : IPostRepository
     {
+        public int CountPublished
+        {
+            get
+            {
+                using (var db = new CmsContext())
+                {
+                    return db.Posts
+                        .Count(p => p.Published <= DateTime.Now);
+                }
+                    
+            }
+        }
+
         public Post Get(string id)
         {
             using (var db = new CmsContext())
@@ -103,6 +116,22 @@ namespace MvcCms.Data
                 return posts
                        .Where(t => t.Tags.Contains(tagId, StringComparer.CurrentCultureIgnoreCase))
                        .ToList();
+            }
+        }
+
+        public async Task<IEnumerable<Post>> GetPageAsync(int pageNumber, int pageSize)
+        {
+            var skip = (pageNumber - 1)*pageSize;
+
+            using (var db = new CmsContext())
+            {
+                return await db.Posts
+                    .Include("Author")
+                    .Where(p => p.Published <= DateTime.Now)
+                    .OrderByDescending(p => p.Published)
+                    .Skip(skip)
+                    .Take(pageSize)
+                    .ToArrayAsync();
             }
         }
 

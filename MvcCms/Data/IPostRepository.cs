@@ -9,6 +9,7 @@ namespace MvcCms.Data
 {
     public interface IPostRepository
     {
+        int CountPublished { get; }
         Post Get(string id);
 
         void Edit(string id, Post updatedItem);
@@ -24,5 +25,7 @@ namespace MvcCms.Data
         Task<IEnumerable<Post>> GetPublishedPostsAsync();
 
         Task<IEnumerable<Post>> GetPostsByTagAsync(string tagId);
+
+        Task<IEnumerable<Post>> GetPageAsync(int pageNumber, int pageSize);
     }
 }

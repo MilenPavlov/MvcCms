@@ -10,9 +10,22 @@
 <h2>Index</h2>
 
 
-@foreach (var post in Model)
+@*@foreach (var post in Model)
 {
     @Html.Partial("_renderPost", post)
     <hr>
-}
+}*@
+
 @Html.Raw(string.Join("<hr/> ", Model.Select(x => Html.Partial("_renderPost", x))))
+
+@if (ViewBag.PreviousPage > 0)
+{
+    @Html.ActionLink("Previous Page", "page", new { controller = "home", page = ViewBag.PreviousPage } )
+}    
+
+    &nbsp;
+
+@if (ViewBag.NextPage > -1)
+{
+    @Html.ActionLink("Next Page", "page", new { controller = "home", page = ViewBag.NextPage })
+}        
