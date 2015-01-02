@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -59,11 +60,21 @@ namespace MvcCms.Data
             }
         }
 
-        public IEnumerable<Post> GetAll()
+        public async Task<IEnumerable<Post>> GetAllAsync()
         {
             using (var db = new CmsContext())
             {
-                return db.Posts.Include("Author").OrderByDescending(x => x.Created).ToArray();
+                return await db.Posts.Include("Author").OrderByDescending(x => x.Created).ToArrayAsync();
+            }
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsByAuthorAsync(string authorId)
+        {
+            using (var db = new CmsContext())
+            {
+                return await db.Posts.Include("Author")
+                    .Where(x=>x.AuthorId == authorId)
+                    .OrderByDescending(x => x.Created).ToArrayAsync();
             }
         }
 
@@ -83,5 +94,25 @@ namespace MvcCms.Data
                 db.SaveChanges();
             }
         }
+
+
+        //private bool _isDisposed;
+        //public void Dispose(bool disposing)
+        //{
+        //    if (!_isDisposed)
+        //    {
+        //        //_repository.Dispose();
+        //        _users.Dispose();
+
+        //    }
+
+        //    _isDisposed = true;
+        //    base.Dispose(disposing);
+        //}
+
+        //public void Dispose()
+        //{
+        //    throw new NotImplementedException();
+        //}
     }
 }

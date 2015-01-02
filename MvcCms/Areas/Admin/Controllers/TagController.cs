@@ -9,6 +9,7 @@ namespace MvcCms.Areas.Admin.Controllers
 {
     [RouteArea("admin")]
     [RoutePrefix("tag")]
+    [Authorize(Roles = "admin, editor")]
     public class TagController : Controller
     {
         private readonly ITagRepository _repository;

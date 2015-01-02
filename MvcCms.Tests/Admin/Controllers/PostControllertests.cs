@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using System.Web.Mvc;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MvcCms.Areas.Admin.Controllers;
@@ -14,14 +15,14 @@ namespace MvcCms.Tests.Admin.Controllers
     public class PostControllertests
     {
         [TestMethod]
-        public void Edit_GetRequest()
+        public async Task Edit_GetRequest()
         {
             var id = "test-post";
             var repo = Mock.Create<IPostRepository>();
             Mock.Arrange(() => repo.Get(id)).Returns(new Post {Id = "test-post"});
-            var controller = new PostController(repo);
+            var controller = new PostController(repo, null);
 
-            var result = (ViewResult)controller.Edit(id);
+            var result = (ViewResult)( await controller.Edit(id));
 
             var model = (Post) result.Model;
 
@@ -34,7 +35,7 @@ namespace MvcCms.Tests.Admin.Controllers
             var id = "test-post";
             var repo = Mock.Create<IPostRepository>();
             Mock.Arrange(() => repo.Get(id)).Returns((Post)null);
-            var controller = new PostController(repo);
+            var controller = new PostController(repo, null);
 
             var result = controller.Edit(id);
 
@@ -50,7 +51,7 @@ namespace MvcCms.Tests.Admin.Controllers
             var id = "test-post";
             var repo = Mock.Create<IPostRepository>();
             Mock.Arrange(() => repo.Get(id)).Returns((Post)null);
-            var controller = new PostController(repo);
+            var controller = new PostController(repo, null);
 
             var result = controller.Edit(id, new Post());
 
@@ -60,14 +61,14 @@ namespace MvcCms.Tests.Admin.Controllers
         }
 
         [TestMethod]
-        public void Edit_PostRequestSendsPostToView()
+        public async Task Edit_PostRequestSendsPostToView()
         {
             var id = "test-post";
             var repo = Mock.Create<IPostRepository>();
             Mock.Arrange(() => repo.Get(id)).Returns(new Post { Id = "test-post" });
-            var controller = new PostController(repo);
+            var controller = new PostController(repo, null);
             controller.ViewData.ModelState.AddModelError("", "some error");
-            var result = (ViewResult)controller.Edit(id, new Post(){Id = "test-post2"});
+            var result = (ViewResult)(await controller.Edit(id, new Post(){Id = "test-post2"}));
 
             var model = (Post)result.Model;
 
@@ -81,7 +82,7 @@ namespace MvcCms.Tests.Admin.Controllers
             var repo = Mock.Create<IPostRepository>();
             Mock.Arrange(() => repo.Edit(Arg.IsAny<string>(), Arg.IsAny<Post>())).MustBeCalled();
              
-            var controller = new PostController(repo);
+            var controller = new PostController(repo, null);
             //controller.ViewData.ModelState.AddModelError("", "some error");
             var result = controller.Edit("foo", new Post() { Id = "test-post2" });
 

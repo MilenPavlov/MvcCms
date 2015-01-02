@@ -14,6 +14,7 @@ namespace MvcCms.Areas.Admin.Controllers
 {
     [RouteArea("admin")]
     [RoutePrefix("user")]
+    [Authorize]
     public class UserController : Controller
     {
         private readonly IUserRepository _userRepository;
@@ -28,6 +29,7 @@ namespace MvcCms.Areas.Admin.Controllers
 
         // GET: Admin/User
         [Route("")]
+        [Authorize(Roles = "admin")]
         public async Task<ActionResult> Index()
         {
             var users = await _userRepository.GetAllUsersAsync();
@@ -37,8 +39,17 @@ namespace MvcCms.Areas.Admin.Controllers
 
         [HttpGet]
         [Route("edit/{username}")]
+        [Authorize(Roles = "admin, editor, author")]
         public async Task<ActionResult> Edit(string userName)
         {
+            var currentyser = User.Identity.Name;
+
+            if (!User.IsInRole("admin") &&
+                !string.Equals(currentyser, userName, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var user = await _users.GetUserByNameAsync(userName);
 
             if (user == null)
@@ -53,13 +64,27 @@ namespace MvcCms.Areas.Admin.Controllers
         [HttpPost]
         [Route("edit/{username}")]
         [ValidateAntiForgeryToken]
-        public async  Task<ActionResult> Edit(UserViewModel model)
+        [Authorize(Roles = "admin, editor, author")]
+        public async  Task<ActionResult> Edit(UserViewModel model, string username)
         {
+            var currentyser = User.Identity.Name;
+            var isAdmin = User.IsInRole("admin");
+            if (!isAdmin &&
+                !string.Equals(currentyser, username, StringComparison.CurrentCultureIgnoreCase))
+            {
+                return new HttpUnauthorizedResult();
+            }
+
             var userUpdated = await _users.UpdateUser(model);
 
             if (userUpdated)
             {
-                return RedirectToAction("index");
+                if(isAdmin)
+                    return RedirectToAction("index");
+                else
+                {
+                    return RedirectToAction("index", "admin");
+                }
             }
 
             return View(model);          
@@ -67,6 +92,7 @@ namespace MvcCms.Areas.Admin.Controllers
 
         [HttpPost]
         [Route("delete/{username}")]
+        [Authorize(Roles = "admin")]
         [ValidateAntiForgeryToken]
         public async  Task<ActionResult> Delete(string userName)
         {

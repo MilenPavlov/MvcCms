@@ -15,8 +15,10 @@ namespace MvcCms.Data
 
         void Create(Post model);
 
-        IEnumerable<Post> GetAll();
+        Task<IEnumerable<Post>> GetAllAsync();
 
         void Delete(string id);
+
+        Task<IEnumerable<Post>> GetPostsByAuthorAsync(string authorId);
     }
 }
