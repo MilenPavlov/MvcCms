@@ -20,5 +20,9 @@ namespace MvcCms.Data
         void Delete(string id);
 
         Task<IEnumerable<Post>> GetPostsByAuthorAsync(string authorId);
+
+        Task<IEnumerable<Post>> GetPublishedPostsAsync();
+
+        Task<IEnumerable<Post>> GetPostsByTagAsync(string tagId);
     }
 }

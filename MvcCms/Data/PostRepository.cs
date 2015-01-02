@@ -78,6 +78,34 @@ namespace MvcCms.Data
             }
         }
 
+        public async Task<IEnumerable<Post>> GetPublishedPostsAsync()
+        {
+            using (var db = new CmsContext())
+            {
+                var posts =  await db.Posts
+                    .Include("Author")
+                    .Where(p => p.Published <= DateTime.Now)
+                    .OrderByDescending(p=>p.Published)
+                    .ToArrayAsync();
+
+                return posts;
+            }
+        }
+
+        public async Task<IEnumerable<Post>> GetPostsByTagAsync(string tagId)
+        {
+            using (var db = new CmsContext())
+            {
+                var posts = await db.Posts
+                    .Include("Author")
+                    .Where(p => p.CombinedTags.Contains(tagId)).ToListAsync();
+
+                return posts
+                       .Where(t => t.Tags.Contains(tagId, StringComparer.CurrentCultureIgnoreCase))
+                       .ToList();
+            }
+        }
+
 
         public void Delete(string id)
         {
@@ -94,25 +122,5 @@ namespace MvcCms.Data
                 db.SaveChanges();
             }
         }
-
-
-        //private bool _isDisposed;
-        //public void Dispose(bool disposing)
-        //{
-        //    if (!_isDisposed)
-        //    {
-        //        //_repository.Dispose();
-        //        _users.Dispose();
-
-        //    }
-
-        //    _isDisposed = true;
-        //    base.Dispose(disposing);
-        //}
-
-        //public void Dispose()
-        //{
-        //    throw new NotImplementedException();
-        //}
     }
 }

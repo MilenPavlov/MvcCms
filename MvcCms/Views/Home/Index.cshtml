@@ -1,0 +1,18 @@
+﻿@model IEnumerable<MvcCms.Models.Post>
+
+@{
+    ViewBag.Title = "Posts";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+    ViewBag.IsIndex = true;
+}
+
+<h2>Index</h2>
+
+
+@foreach (var post in Model)
+{
+    @Html.Partial("_renderPost", post)
+    <hr>
+}
+@Html.Raw(string.Join("<hr/> ", Model.Select(x => Html.Partial("_renderPost", x))))

@@ -1,0 +1,3 @@
+﻿@model IEnumerable<string>
+           
+@Html.Raw(string.Join(", ", Model.Select(x=>Html.ActionLink(x, "tag", new{controller="home", tagId = x}))))

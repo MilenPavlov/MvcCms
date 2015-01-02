@@ -146,6 +146,7 @@
     <Compile Include="Areas\Admin\ViewModels\AdminMenuItem.cs" />
     <Compile Include="Areas\Admin\ViewModels\LoginViewModel.cs" />
     <Compile Include="Areas\Admin\ViewModels\UserViewModel.cs" />
+    <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Data\CmsContext.cs" />
     <Compile Include="Data\IdentityClasses.cs" />
     <Compile Include="Data\IPostRepository.cs" />
@@ -188,6 +189,12 @@
     <Content Include="Areas\Admin\Views\Admin\Login.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\AdminMenu.cshtml" />
     <Content Include="Areas\Admin\Views\Admin\_menuLink.cshtml" />
+    <Content Include="Views\Home\_renderPost.cshtml" />
+    <Content Include="Views\Home\_renderTags.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="Views\Home\Post.cshtml" />
+    <Content Include="Views\Home\Tag.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -198,7 +205,7 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Areas\Admin\Models\" />
-    <Folder Include="Controllers\" />
+    <Folder Include="Views\Default\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
