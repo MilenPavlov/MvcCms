@@ -1,0 +1,7 @@
+﻿@model IEnumerable<MvcCms.Areas.Admin.ViewModels.AdminMenuItem>
+
+
+@foreach (var item in Model) {
+    @Html.Partial("_menuLink", item)
+}
+

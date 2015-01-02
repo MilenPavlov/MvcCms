@@ -75,6 +75,80 @@ namespace MvcCms.Areas.Admin.Controllers
             return RedirectToAction("index", "home");
         }
 
+        [AllowAnonymous]
+        public async Task<PartialViewResult> AdminMenu()
+        {
+            var items = new List<AdminMenuItem>();
+
+            if (User.Identity.IsAuthenticated)
+            {
+                items.Add(new AdminMenuItem{Text = "Admin Home", Action = "index", 
+                    RouteInfo = new{controller = "admin", area = "admin"}});
+
+                if (User.IsInRole("admin"))
+                {
+                    items.Add(new AdminMenuItem
+                    {
+                        Text = "Users",
+                        Action = "index",
+                        RouteInfo = new { controller = "user", area = "admin" }
+                    });
+                }
+                else
+                {
+                    items.Add(new AdminMenuItem
+                    {
+                        Text = "Profile",
+                        Action = "edit",
+                        RouteInfo = new { controller = "user", area = "admin", username = User.Identity.Name }
+                    });
+                }
+
+                if (!User.IsInRole("author"))
+                {
+                    items.Add(new AdminMenuItem
+                    {
+                        Text = "Tags",
+                        Action = "index",
+                        RouteInfo = new { controller = "tag", area = "admin" }
+                    });
+                }
+
+                items.Add(new AdminMenuItem
+                {
+                    Text = "Posts",
+                    Action = "index",
+                    RouteInfo = new { controller = "post", area = "admin" }
+                });
+
+            }
+
+          
+
+            return PartialView(items);
+        }
+        [AllowAnonymous]
+        public async Task<PartialViewResult> AuthenticationLink()
+        {
+            var item = new AdminMenuItem
+            {
+                RouteInfo = new { controller = "admin", area = "admin"}
+            };
+
+            if (User.Identity.IsAuthenticated)
+            {
+                item.Text = "Log out";
+                item.Action = "logout";
+            }
+            else
+            {
+                item.Text = "Log in";
+                item.Action = "login";
+            }
+
+            return PartialView("_menulink", item);
+        }
+
         private bool _isDisposed;
         protected override void Dispose(bool disposing)
         {
