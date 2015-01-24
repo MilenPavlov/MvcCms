@@ -13,10 +13,10 @@ namespace MvcCms.Data
     public class CmsContext: IdentityDbContext<CmsUser>
     {
 
-        public CmsContext() :base("mvccms_db")
-        {
+        //public CmsContext() :base("mvccms_db")
+        //{
             
-        }
+        //}
 
         public DbSet<Post> Posts { get; set; }
         //public DbSet<MyUserInfo> MyUserInfos { get; set; } 
