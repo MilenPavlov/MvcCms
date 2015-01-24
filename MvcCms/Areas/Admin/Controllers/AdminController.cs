@@ -72,7 +72,7 @@ namespace MvcCms.Areas.Admin.Controllers
             authManager.SignOut();
 
 
-            return RedirectToAction("index", "home");
+            return RedirectToAction("index", "home", new{area =""});
         }
 
         [AllowAnonymous]

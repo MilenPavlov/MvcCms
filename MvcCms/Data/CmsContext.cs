@@ -13,10 +13,11 @@ namespace MvcCms.Data
     public class CmsContext: IdentityDbContext<CmsUser>
     {
 
-        //public CmsContext()
-        //{
-        //    Database.SetInitializer<>;
-        //}
+        public CmsContext() :base("mvccms_db")
+        {
+            
+        }
+
         public DbSet<Post> Posts { get; set; }
         //public DbSet<MyUserInfo> MyUserInfos { get; set; } 
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
