@@ -1,4 +1,4 @@
-workflow azure_db_restore_v2
+workflow azure_db_restore
 {
 	Param
     (   
